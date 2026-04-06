@@ -13,13 +13,6 @@ class PapiQuestionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Menonaktifkan foreign key checks sementara
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-        // Hapus semua data lama sebelum menyisipkan yang baru
-        // Menggunakan truncate() yang lebih cepat untuk membersihkan tabel
-        PapiQuestion::truncate();
-
         $questionsData = [
             // Soal 1
             [

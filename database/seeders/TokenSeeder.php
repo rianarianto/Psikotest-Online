@@ -11,16 +11,6 @@ class TokenSeeder extends Seeder
 {
     public function run(): void
     {
-        // Menonaktifkan pemeriksaan foreign key sementara
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-        // Hapus token yang sudah ada untuk menghindari duplikasi saat seeding ulang
-        // Ini akan berhasil setelah foreign key checks dinonaktifkan
-        Token::truncate();
-
-        // Mengaktifkan kembali pemeriksaan foreign key
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
         // Buat 20 token baru
         for ($i = 0; $i < 20; $i++) {
             Token::create([
