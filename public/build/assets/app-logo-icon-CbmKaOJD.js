@@ -1,1 +1,0 @@
-import{j as s}from"./app-BT3F6TFH.js";const t="/build/assets/yotek-CQGk8-Il.png";function n(o){return s.jsx("img",{src:t,alt:"App Logo",className:`object-contain ${o.className??""}`,...o})}export{n as A};
