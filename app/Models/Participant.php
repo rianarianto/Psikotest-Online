@@ -71,14 +71,25 @@ class Participant extends Model
      */
     public function allTestsCompleted(): bool
     {
-        $assignedTests = $this->token ? $this->token->getAssignedTestCodes() : [];
+        $assignedTestCodes = $this->token ? $this->token->getAssignedTestCodes() : [];
 
-        if (empty($assignedTests)) {
-            return false;
+        if (empty($assignedTestCodes)) {
+            // Case where no tests are assigned should be considered complete or handled gracefully
+            // In the General Instructions hub, empty tests results in "allCompleted = true" in JS.
+            return true; 
         }
 
-        foreach ($assignedTests as $testCode) {
-            $status = $this->getTestStatus($testCode);
+        // Only check tests that are actually registered and active in the system
+        $activeTests = \App\Models\TestType::whereIn('code', $assignedTestCodes)
+            ->active()
+            ->get();
+
+        if ($activeTests->isEmpty()) {
+            return true;
+        }
+
+        foreach ($activeTests as $testType) {
+            $status = $this->getTestStatus($testType->code);
             if (!$status || !$status->isCompleted()) {
                 return false;
             }

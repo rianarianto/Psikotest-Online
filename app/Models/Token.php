@@ -69,22 +69,18 @@ class Token extends Model
      */
     public function getAssignedTestCodes(): array
     {
-        // If assigned_tests is set, use it
+        // If assigned_tests is set (JSON array), use it
         if (!empty($this->assigned_tests)) {
             return $this->assigned_tests;
         }
 
-        // Backward compatibility: convert old test_type to array
-        switch ($this->test_type) {
-            case 'papi':
-                return ['papi'];
-            case 'kraepelin':
-                return ['kraepelin'];
-            case 'kraepelin,papi':
-                return ['papi', 'kraepelin'];
-            default:
-                return [];
+        // Backward compatibility: parse test_type string (e.g., "papi,kraepelin")
+        if (empty($this->test_type)) {
+            return [];
         }
+
+        // Split by comma and trim whitespace just in case
+        return array_map('trim', explode(',', $this->test_type));
     }
 }
 

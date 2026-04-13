@@ -135,6 +135,14 @@ class GeneralInstructionController extends Controller
 
         // Verify all tests are completed
         if (!$participant->allTestsCompleted()) {
+            $participant->load('participantTests.testType');
+            Log::warning('GeneralInstructionController@submitAll: Completion check failed', [
+                'participant_id' => $participant->id,
+                'token_id' => $token->id,
+                'assigned_test_codes' => $token->getAssignedTestCodes(),
+                'test_statuses' => $participant->participantTests->map(fn($t) => [($t->testType->code ?? 'unknown') => $t->status]),
+            ]);
+            
             return back()->withErrors([
                 'error' => 'Semua tes harus diselesaikan terlebih dahulu.'
             ]);
