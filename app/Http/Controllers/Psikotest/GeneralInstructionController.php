@@ -136,15 +136,17 @@ class GeneralInstructionController extends Controller
         // Verify all tests are completed
         if (!$participant->allTestsCompleted()) {
             $participant->load('participantTests.testType');
+            $testStatuses = $participant->participantTests->map(fn($t) => ($t->testType->code ?? 'unknown') . ': ' . $t->status)->implode(', ');
+            
             Log::warning('GeneralInstructionController@submitAll: Completion check failed', [
                 'participant_id' => $participant->id,
                 'token_id' => $token->id,
                 'assigned_test_codes' => $token->getAssignedTestCodes(),
-                'test_statuses' => $participant->participantTests->map(fn($t) => [($t->testType->code ?? 'unknown') => $t->status]),
+                'test_statuses' => $testStatuses,
             ]);
             
             return back()->withErrors([
-                'error' => 'Semua tes harus diselesaikan terlebih dahulu.'
+                'error' => 'Semua tes harus diselesaikan terlebih dahulu. Status saat ini: ' . $testStatuses
             ]);
         }
 
@@ -164,7 +166,7 @@ class GeneralInstructionController extends Controller
         // $request->session()->forget(['participant_id', 'token_id', 'test_type']);
 
         Log::info('GeneralInstructionController@submitAll: All tests submitted for participant ' . $participantId);
-
-        return back();
+        
+        return redirect()->route('psikotest.general-instructions')->with('success', 'Semua tes berhasil dikirim.');
     }
 }

@@ -143,6 +143,9 @@ Route::middleware(['web', 'token.valid'])->group(function () {
      Route::post('/psikotest/kraepelin-test/mark-completed', [KraepelinTestController::class, 'markCompleted'])
           ->name('psikotest.kraepelin-test.mark-completed');
 
+     Route::get('/psikotest/finish', [GeneralInstructionController::class, 'show'])
+          ->name('psikotest.finish-test');
+
 });
 
 

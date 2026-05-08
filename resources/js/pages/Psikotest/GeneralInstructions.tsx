@@ -117,10 +117,11 @@ export default function GeneralInstructions({ participant, token, tests, allComp
             },
             onError: (err) => {
                 setIsSubmitting(false);
+                const errorMessage = err.error || 'Terjadi kesalahan saat mengirim hasil assessment. Silakan coba lagi.';
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal Mengirim',
-                    text: 'Terjadi kesalahan saat mengirim hasil assessment. Silakan coba lagi.',
+                    text: errorMessage,
                     confirmButtonText: 'OK',
                     customClass: {
                         confirmButton: 'bg-red-600 text-white rounded-md px-6 py-2',

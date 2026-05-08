@@ -21,6 +21,7 @@ class Participant extends Model
         'position',
         'institution',
         'token_id',
+        'test_completed_at',
     ];
 
     /**
