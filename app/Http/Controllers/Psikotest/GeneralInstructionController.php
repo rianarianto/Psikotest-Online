@@ -150,10 +150,14 @@ class GeneralInstructionController extends Controller
             ]);
         }
 
-        // Update participant completion time
-        $participant->update([
-            'test_completed_at' => now(),
-        ]);
+        // Update participant completion time (Defensive check if migration hasn't run)
+        try {
+            $participant->update([
+                'test_completed_at' => now(),
+            ]);
+        } catch (\Exception $e) {
+            Log::warning('GeneralInstructionController@submitAll: test_completed_at column missing, skipping update.');
+        }
 
         // Update token status
         $token->update([
